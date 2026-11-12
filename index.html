@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PuneEduMatch — Pune College Finder & Comparison after 12th</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Custom scrollbar and range slider polish */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 8px;
+      border-radius: 999px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      margin-top: -6px;
+      background-color: #4f46e5;
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      border: 3px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.45);
+      transition: transform 0.15s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div onclick="closeCollegeDetail()" class="flex items-center gap-3 cursor-pointer">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md shadow-indigo-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+          </svg>
+        </div>
+        <div>
+          <span class="font-display font-extrabold text-xl tracking-tight text-slate-900">Pune<span class="text-indigo-600">EduMatch</span></span>
+          <p class="text-[11px] text-slate-500 hidden sm:block">Oxford of the East • Post-12th Admission & Cutoff Guide</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <span class="hidden md:inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          24 Top Pune Colleges
+        </span>
+        <button id="openCompareHeaderBtn" onclick="openCompareModal()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span>Compare (<span id="headerCompareCount">0</span>)</span>
+        </button>
+        <button onclick="openSourceModal()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-900 text-white hover:bg-slate-800 transition shadow-sm" title="View or copy single-file HTML source code">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          </svg>
+          <span class="hidden sm:inline">Source Code</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Directory View Wrapper (Home Page) -->
+  <div id="directoryView">
+  <!-- Hero & Interactive Score Finder Section -->
+  <section class="bg-gradient-to-b from-indigo-950 via-indigo-900 to-slate-900 text-white pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: radial-gradient(#818cf8 1px, transparent 1px); background-size: 24px 24px;"></div>
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="text-center max-w-3xl mx-auto mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-800/70 border border-indigo-600/50 text-indigo-200 text-xs font-medium mb-3">
+          <span>Confused after 12th? Find your exact Pune college match in seconds</span>
+        </div>
+        <h1 class="font-display text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+          Compare Pune Colleges by Your <span class="text-amber-300">12th %</span> or <span class="text-cyan-300">Entrance Percentile</span>
+        </h1>
+        <p class="mt-2.5 text-sm sm:text-base text-indigo-200">
+          Enter your HSC/CBSE/ICSE percentage or MHT-CET / JEE / NEET percentile to see real-time eligibility, campus photos, Pune locations, fees, and placement comparisons.
+        </p>
+      </div>
+
+      <!-- Control Card -->
+      <div class="bg-white text-slate-800 rounded-2xl shadow-2xl border border-slate-200/80 p-5 sm:p-6 max-w-5xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          
+          <!-- Left: Score Mode Toggle + Slider -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-500">1. Select Score Type</label>
+              <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+                <button id="modePercentileBtn" onclick="setScoreMode('percentile')" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-indigo-600 text-white shadow-sm">
+                  Entrance Percentile (%ile)
+                </button>
+                <button id="modePercentageBtn" onclick="setScoreMode('percentage')" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition text-slate-600 hover:text-slate-900">
+                  12th Board %
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <div class="flex items-center justify-between mb-2">
+                <span id="scoreLabelText" class="text-sm font-semibold text-slate-700">Your MHT-CET / JEE / NEET Percentile:</span>
+                <div class="flex items-center gap-1.5">
+                  <input id="scoreNumberInput" type="number" min="0" max="100" step="0.1" value="92.0" oninput="handleScoreInput(this.value)" class="w-24 text-right font-display font-extrabold text-xl text-indigo-700 bg-white border border-indigo-300 rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <span id="scoreUnitBadge" class="text-sm font-bold text-indigo-600">%ile</span>
+                </div>
+              </div>
+              <input id="scoreRangeInput" type="range" min="40" max="100" step="0.1" value="92.0" oninput="handleScoreInput(this.value)" class="w-full accent-indigo-600 bg-slate-200 rounded-lg h-2" />
+              <div class="flex justify-between text-[11px] font-medium text-slate-400 mt-1.5">
+                <span>40</span>
+                <span>60</span>
+                <span>75</span>
+                <span>85</span>
+                <span>95</span>
+                <span>100</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Filters -->
+          <div class="lg:col-span-5 space-y-3.5 border-t lg:border-t-0 lg:border-l border-slate-200 pt-4 lg:pt-0 lg:pl-6">
+            <div>
+              <label for="streamFilter" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">2. Stream / Field</label>
+              <select id="streamFilter" onchange="renderColleges()" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="ALL">All Streams (Engg, Arts, Commerce, Med, Law)</option>
+                <option value="Engineering">Engineering & Technology (B.E. / B.Tech)</option>
+                <option value="Arts/Science/Commerce">Arts, Science, Commerce, BBA & BCA</option>
+                <option value="Medical/Pharmacy">Medical & Health Sciences (MBBS / BAMS)</option>
+                <option value="Law">Law & Legal Studies (BA LLB / BBA LLB)</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="typeFilter" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">College Type</label>
+                <select id="typeFilter" onchange="renderColleges()" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option value="ALL">All Types</option>
+                  <option value="Government/Aided">Govt / Aided</option>
+                  <option value="Autonomous">Autonomous</option>
+                  <option value="Private/Deemed">Private / Deemed</option>
+                </select>
+              </div>
+              <div>
+                <label for="sortFilter" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Sort By</label>
+                <select id="sortFilter" onchange="renderColleges()" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option value="match">Best Match First</option>
+                  <option value="cutoffHigh">Cutoff: High to Low</option>
+                  <option value="cutoffLow">Cutoff: Low to High</option>
+                  <option value="package">Highest Avg Package</option>
+                  <option value="feesLow">Lowest Annual Fees</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                <input id="onlyEligibleToggle" type="checkbox" onchange="renderColleges()" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300" />
+                <span class="text-xs sm:text-sm font-semibold text-slate-700">Show Only Eligible / Borderline</span>
+              </label>
+              <button onclick="resetFilters()" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 underline">Reset</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search & Summary Bar -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div>
+        <h2 class="font-display font-bold text-xl text-slate-900">
+          Showing <span id="visibleCount" class="text-indigo-600">24</span> Pune Colleges
+        </h2>
+        <p id="matchSummaryText" class="text-xs sm:text-sm text-slate-500 mt-0.5">
+          Comparing against your 92.0 %ile entrance score
+        </p>
+      </div>
+
+      <!-- Search Input -->
+      <div class="relative w-full sm:w-80">
+        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input id="searchInput" type="text" oninput="renderColleges()" placeholder="Search college, area (e.g. Kothrud, Shivajinagar)..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm" />
+      </div>
+    </div>
+
+    <!-- Legend Badges -->
+    <div class="flex flex-wrap items-center gap-3 mb-6 text-xs">
+      <span class="font-semibold text-slate-500">Eligibility Guide:</span>
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
+        <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Safe Match (Score &ge; Cutoff)
+      </span>
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-semibold">
+        <span class="w-2 h-2 rounded-full bg-amber-500"></span> Borderline / Reach (Within 3.0)
+      </span>
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 font-semibold">
+        <span class="w-2 h-2 rounded-full bg-rose-500"></span> Above Cutoff (Needs Higher Score)
+      </span>
+    </div>
+
+    <!-- College Cards Grid -->
+    <div id="collegeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Cards injected by JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16 bg-white rounded-2xl border border-slate-200 shadow-sm">
+      <div class="w-14 h-14 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h3 class="font-display font-bold text-lg text-slate-900">No colleges match your current filters</h3>
+      <p class="text-sm text-slate-500 mt-1 max-w-md mx-auto">Try unchecking "Show Only Eligible", adjusting your percentage/percentile, or clearing the search box.</p>
+      <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition">Reset All Filters</button>
+    </div>
+  </main>
+  </div>
+
+  <!-- Dedicated Full-Page College Detail View -->
+  <section id="collegeDetailView" class="hidden flex-1 bg-slate-50 pb-16">
+    <!-- Breadcrumb & Back Header -->
+    <div class="bg-white border-b border-slate-200 sticky top-16 z-30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+        <button onclick="closeCollegeDetail()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs sm:text-sm font-semibold transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>Back to All Pune Colleges</span>
+        </button>
+        <div id="detailTopActions" class="flex items-center gap-2">
+          <!-- Injected Compare & Map CTA -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Detail Page Body -->
+    <div id="collegeDetailContent" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
+      <!-- Dynamic full-page details injected by JS -->
+    </div>
+  </section>
+
+  <!-- Floating Comparison Dock -->
+  <div id="compareDock" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-4xl bg-slate-900 text-white rounded-2xl shadow-2xl border border-slate-700 p-3.5 sm:px-5 transition-all duration-300 translate-y-32 opacity-0 pointer-events-none">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+        <span class="text-xs font-bold uppercase tracking-wider text-indigo-300 whitespace-nowrap">Compare (<span id="dockCount">0</span>/4):</span>
+        <div id="dockChips" class="flex items-center gap-2">
+          <!-- Selected college chips -->
+        </div>
+      </div>
+      <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+        <button onclick="clearCompare()" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Clear</button>
+        <button onclick="openCompareModal()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-950 transition whitespace-nowrap">
+          Compare Side-by-Side &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Location & Map Modal -->
+  <div id="mapModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-200 animate-fadeIn">
+      <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600">Pune Campus Location</span>
+          <h3 id="mapModalTitle" class="font-display font-bold text-lg text-slate-900">College Name</h3>
+          <p id="mapModalAddress" class="text-xs text-slate-500 mt-0.5">Full Address, Pune</p>
+        </div>
+        <button onclick="closeMapModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="relative w-full h-72 sm:h-80 bg-slate-100">
+        <iframe id="osmIframe" class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src=""></iframe>
+      </div>
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+        <div class="text-xs text-slate-600">
+          <span class="font-semibold">Coordinates:</span> <span id="mapModalCoords">18.5204° N, 73.8567° E</span>
+        </div>
+        <a id="googleMapsExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold transition shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Open in Google Maps
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Side-by-Side Comparison Modal -->
+  <div id="compareModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 backdrop-blur-sm p-3 sm:p-6">
+    <div class="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200">
+      <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div>
+          <h3 class="font-display font-bold text-lg sm:text-xl text-slate-900">Side-by-Side Pune College Comparison</h3>
+          <p id="compareModalSubtitle" class="text-xs text-slate-500 mt-0.5">Comparing selected colleges based on your score</p>
+        </div>
+        <button onclick="closeCompareModal()" class="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200/70">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div id="compareModalBody" class="p-4 sm:p-6 overflow-auto flex-1">
+        <!-- Dynamic comparison table -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Single-File Source Code Viewer Modal -->
+  <div id="sourceModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 backdrop-blur-sm p-3 sm:p-6">
+    <div class="bg-slate-900 text-slate-100 rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col overflow-hidden shadow-2xl border border-slate-700">
+      <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+        <div>
+          <h3 class="font-display font-bold text-base sm:text-lg text-white">Single-File HTML Source Code (`pune_edu_match.html`)</h3>
+          <p class="text-xs text-slate-400">Complete standalone HTML, Tailwind CSS, and JavaScript in one file.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="copySourceBtn" onclick="copyFullSourceCode()" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition">
+            Copy All Code
+          </button>
+          <button onclick="closeSourceModal()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="p-4 overflow-auto flex-1 bg-slate-950 font-mono text-xs text-emerald-300">
+        <pre id="sourceCodeDisplay" class="whitespace-pre-wrap break-words"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastBox" class="fixed top-20 right-4 z-50 bg-slate-900 text-white text-xs sm:text-sm font-medium px-4 py-3 rounded-xl shadow-xl border border-slate-700 transition-all duration-300 opacity-0 pointer-events-none translate-y-2">
+    Notification message
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-12 py-6 px-4 text-center text-xs text-slate-500">
+    <p class="font-semibold text-slate-700">PuneEduMatch — Helping Students Choose the Right Pune College After 12th</p>
+    <p class="mt-1">Note: Cutoffs shown represent approximate General/Open category benchmarks (MHT-CET / JEE / NEET / HSC Board). Always verify official DTE Maharashtra / SPPU CAP round notifications.</p>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // 1. CURATED DATABASE OF 24 MAJOR PUNE COLLEGES WITH REAL PHOTOS & LOCATIONS
+    // =========================================================================
+    const puneColleges = [
+      {
+        id: "coep",
+        name: "COEP Technological University",
+        shortName: "COEP Tech",
+        area: "Shivajinagar, Pune",
+        address: "Wellesley Rd, Shivajinagar, Pune, Maharashtra 411005",
+        lat: 18.5293,
+        lng: 73.8565,
+        stream: "Engineering",
+        type: "Government/Aided",
+        established: 1854,
+        naac: "A+",
+        cutoffPercentile: 99.6,
+        cutoffPercentage: 96.5,
+        examName: "MHT-CET / JEE Main",
+        avgPackage: "₹11.35 LPA",
+        annualFees: "₹95,000",
+        courses: ["Computer Engineering", "Electronics & Telecomm.", "Mechanical Engg.", "AI & Robotics", "Electrical Engg."],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/COEP_Main_Building.jpg",
+        mapQuery: "COEP+Technological+University+Pune"
+      },
+      {
+        id: "fergusson",
+        name: "Fergusson College (Autonomous)",
+        shortName: "Fergusson College",
+        area: "FC Road, Deccan Gymkhana, Pune",
+        address: "Fergusson College Rd, Shivajinagar, Pune, Maharashtra 411004",
+        lat: 18.5228,
+        lng: 73.8389,
+        stream: "Arts/Science/Commerce",
+        type: "Autonomous",
+        established: 1885,
+        naac: "A+",
+        cutoffPercentile: 96.5,
+        cutoffPercentage: 94.2,
+        examName: "12th Merit / CUET",
+        avgPackage: "₹5.20 LPA",
+        annualFees: "₹28,500",
+        courses: ["B.Sc. Computer Science", "B.A. Psychology & Economics", "B.Sc. Biotechnology", "B.Voc. Media", "B.Sc. Physics"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Fergusson_College_Main_Building.jpg",
+        mapQuery: "Fergusson+College+Pune"
+      },
+      {
+        id: "pict",
+        name: "Pune Institute of Computer Technology (PICT)",
+        shortName: "PICT Pune",
+        area: "Dhankawadi, Katraj, Pune",
+        address: "Survey No. 27, Near Trimurti Chowk, Dhankawadi, Pune 411043",
+        lat: 18.4575,
+        lng: 73.8508,
+        stream: "Engineering",
+        type: "Private/Deemed",
+        established: 1983,
+        naac: "A+",
+        cutoffPercentile: 99.2,
+        cutoffPercentage: 95.0,
+        examName: "MHT-CET / JEE Main",
+        avgPackage: "₹12.10 LPA",
+        annualFees: "₹1,05,000",
+        courses: ["Computer Engineering", "Information Technology", "Electronics & Computer Engg.", "AI & Data Science"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Pune_Institute_of_Computer_Technology.jpg",
+        mapQuery: "Pune+Institute+of+Computer+Technology+Dhankawadi"
+      },
+      {
+        id: "vit",
+        name: "Vishwakarma Institute of Technology (VIT Pune)",
+        shortName: "VIT Pune",
+        area: "Bibwewadi, Pune",
+        address: "666, Upper Indiranagar, Bibwewadi, Pune, Maharashtra 411037",
+        lat: 18.4636,
+        lng: 73.8682,
+        stream: "Engineering",
+        type: "Autonomous",
+        established: 1983,
+        naac: "A++",
+        cutoffPercentile: 98.4,
+        cutoffPercentage: 93.5,
+        examName: "MHT-CET / JEE Main",
+        avgPackage: "₹8.80 LPA",
+        annualFees: "₹1,92,000",
+        courses: ["Computer Engineering", "AI & Machine Learning", "IT", "Mechanical Engg.", "Chemical Engg."],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/VIT_Pune_Campus.jpg",
+        mapQuery: "Vishwakarma+Institute+of+Technology+Bibwewadi+Pune"
+      },
+      {
+        id: "afmc",
+        name: "Armed Forces Medical College (AFMC)",
+        shortName: "AFMC Pune",
+        area: "Wanowrie, Pune",
+        address: "Southern Command, Solapur Rd, Wanowrie, Pune 411040",
+        lat: 18.5042,
+        lng: 73.8907,
+        stream: "Medical/Pharmacy",
+        type: "Government/Aided",
+        established: 1948,
+        naac: "A++",
+        cutoffPercentile: 99.4,
+        cutoffPercentage: 95.0,
+        examName: "NEET-UG + ToELR",
+        avgPackage: "₹14.00 LPA",
+        annualFees: "₹18,000",
+        courses: ["MBBS", "B.Sc. Nursing", "Paramedical Sciences"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/AFMC_Pune.jpg",
+        mapQuery: "Armed+Forces+Medical+College+Pune"
+      },
+      {
+        id: "bjmc",
+        name: "B.J. Government Medical College (BJMC)",
+        shortName: "BJ Medical College",
+        area: "Station Road, Agarkar Nagar, Pune",
+        address: "Jai Prakash Narayan Rd, Near Pune Railway Station, Pune 411001",
+        lat: 18.5262,
+        lng: 73.8712,
+        stream: "Medical/Pharmacy",
+        type: "Government/Aided",
+        established: 1946,
+        naac: "A+",
+        cutoffPercentile: 98.9,
+        cutoffPercentage: 93.0,
+        examName: "NEET-UG",
+        avgPackage: "₹11.50 LPA",
+        annualFees: "₹1,38,000",
+        courses: ["MBBS", "B.Sc. Nursing", "B.P.Th (Physiotherapy)"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/B._J._Medical_College,_Pune.jpg",
+        mapQuery: "B+J+Government+Medical+College+Pune"
+      },
+      {
+        id: "bmcc",
+        name: "Brihan Maharashtra College of Commerce (BMCC)",
+        shortName: "BMCC Pune",
+        area: "Deccan Gymkhana, Pune",
+        address: "845, Shivajinagar, Deccan Gymkhana, Pune 411004",
+        lat: 18.5196,
+        lng: 73.8364,
+        stream: "Arts/Science/Commerce",
+        type: "Autonomous",
+        established: 1943,
+        naac: "A+",
+        cutoffPercentile: 96.0,
+        cutoffPercentage: 94.8,
+        examName: "12th Merit / MAH-CET",
+        avgPackage: "₹6.10 LPA",
+        annualFees: "₹36,000",
+        courses: ["B.Com (Honours)", "BBA", "BBA International Business", "BCA", "B.Com FinTech"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/BMCC_Main_Building.jpg",
+        mapQuery: "Brihan+Maharashtra+College+of+Commerce+Pune"
+      },
+      {
+        id: "mitwpu",
+        name: "MIT World Peace University (MIT-WPU)",
+        shortName: "MIT-WPU",
+        area: "Kothrud, Pune",
+        address: "Paud Rd, Rambaug Colony, Kothrud, Pune 411038",
+        lat: 18.5177,
+        lng: 73.8151,
+        stream: "Engineering",
+        type: "Private/Deemed",
+        established: 1983,
+        naac: "A",
+        cutoffPercentile: 91.5,
+        cutoffPercentage: 84.0,
+        examName: "MHT-CET / JEE / PERA",
+        avgPackage: "₹7.25 LPA",
+        annualFees: "₹3,15,000",
+        courses: ["B.Tech CSE", "B.Tech AI & DS", "BBA", "B.Des", "B.Pharm"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/MIT-SOM_Building_Pune.jpg",
+        mapQuery: "MIT+World+Peace+University+Kothrud+Pune"
+      },
+      {
+        id: "cummins",
+        name: "MKSSS's Cummins College of Engineering for Women",
+        shortName: "Cummins College",
+        area: "Karve Nagar, Pune",
+        address: "Karve Nagar, Pune, Maharashtra 411052",
+        lat: 18.4865,
+        lng: 73.8158,
+        stream: "Engineering",
+        type: "Autonomous",
+        established: 1991,
+        naac: "A",
+        cutoffPercentile: 97.6,
+        cutoffPercentage: 91.5,
+        examName: "MHT-CET / JEE Main",
+        avgPackage: "₹10.80 LPA",
+        annualFees: "₹1,75,000",
+        courses: ["Computer Engineering", "IT", "Electronics & Telecomm.", "Mechanical Engg.", "Instrumentation"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Cummins_College_of_Engineering_Pune.jpg",
+        mapQuery: "Cummins+College+of+Engineering+for+Women+Pune"
+      },
+      {
+        id: "pccoe",
+        name: "Pimpri Chinchwad College of Engineering (PCCOE)",
+        shortName: "PCCOE Nigdi",
+        area: "Nigdi Pradhikaran, Akurdi, Pune",
+        address: "Sector 26, Pradhikaran, Nigdi, Pimpri-Chinchwad, Pune 411044",
+        lat: 18.6517,
+        lng: 73.7616,
+        stream: "Engineering",
+        type: "Autonomous",
+        established: 1999,
+        naac: "A",
+        cutoffPercentile: 97.8,
+        cutoffPercentage: 92.0,
+        examName: "MHT-CET / JEE Main",
+        avgPackage: "₹8.10 LPA",
+        annualFees: "₹1,45,000",
+        courses: ["Computer Engineering", "IT", "CSE (AI & ML)", "Electronics & Telecomm.", "Mechanical"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/PCCOE_Campus_Pune.jpg",
+        mapQuery: "Pimpri+Chinchwad+College+of+Engineering+Pune"
+      },
+      {
+        id: "ils",
+        name: "ILS Law College (Indian Law Society)",
+        shortName: "ILS Law College",
+        area: "Law College Road, Pune",
+        address: "Chiplunkar Rd, Law College Rd, Shivajinagar, Pune 411004",
+        lat: 18.5186,
+        lng: 73.8286,
+        stream: "Law",
+        type: "Government/Aided",
+        established: 1924,
+        naac: "A+",
+        cutoffPercentile: 98.2,
+        cutoffPercentage: 91.0,
+        examName: "MH-CET Law (5-Yr)",
+        avgPackage: "₹7.50 LPA",
+        annualFees: "₹46,000",
+        courses: ["B.A. LL.B. (5 Years)", "B.B.A. LL.B. (5 Years)", "LL.B. (3 Years)"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/ILS_Law_College_Saraswati_Building.jpg",
+        mapQuery: "ILS+Law+College+Pune"
+      },
+      {
+        id: "sls",
+        name: "Symbiosis Law School (SLS Pune)",
+        shortName: "Symbiosis Law",
+        area: "Viman Nagar, Pune",
+        address: "Survey No 227, Plot 11, Rohan Mithila, Viman Nagar, Pune 411014",
+        lat: 18.5679,
+        lng: 73.9143,
+        stream: "Law",
+        type: "Private/Deemed",
+        established: 1977,
+        naac: "A++",
+        cutoffPercentile: 95.0,
+        cutoffPercentage: 88.0,
+        examName: "SLAT + PI",
+        avgPackage: "₹9.60 LPA",
+        annualFees: "₹4,35,000",
+        courses: ["B.A. LL.B. (Hons.)", "B.B.A. LL.B. (Hons.)"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Symbiosis_International_University_Campus.jpg",
+        mapQuery: "Symbiosis+Law+School+Viman+Nagar+Pune"
+      },
+      {
+        id: "scms",
+        name: "Symbiosis Centre for Management Studies (SCMS)",
+        shortName: "SCMS Pune",
+        area: "Viman Nagar, Pune",
+        address: "Symbiosis Campus, New Airport Rd, Viman Nagar, Pune 411014",
+        lat: 18.5665,
+        lng: 73.9125,
+        stream: "Arts/Science/Commerce",
+        type: "Private/Deemed",
+        established: 2004,
+        naac: "A++",
+        cutoffPercentile: 93.5,
+        cutoffPercentage: 86.5,
+        examName: "SET + PI",
+        avgPackage: "₹6.80 LPA",
+        annualFees: "₹3,50,000",
+        courses: ["BBA (Honours)", "BBA International Business", "BBA Entrepreneurship"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Symbiosis_Campus_SB_Road_Pune.jpg",
+        mapQuery: "Symbiosis+Centre+for+Management+Studies+Pune"
+      },
+      {
+        id: "sppu",
+        name: "Savitribai Phule Pune University (SPPU Depts)",
+        shortName: "SPPU Campus",
+        area: "Ganeshkhind, Pune",
+        address: "Ganeshkhind Rd, Pune, Maharashtra 411007",
+        lat: 18.5529,
+        lng: 73.8246,
+        stream: "Arts/Science/Commerce",
+        type: "Government/Aided",
+        established: 1949,
+        naac: "A+",
+        cutoffPercentile: 94.0,
+        cutoffPercentage: 89.5,
+        examName: "SPPU OEE / 12th Merit",
+        avgPackage: "₹6.40 LPA",
+        annualFees: "₹32,000",
+        courses: ["B.Sc. Blended Sciences", "B.A. Liberal Arts", "B.Voc. Renewable Energy", "Integrated M.Sc. Biotech"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/University_of_Pune_Main_Building.jpg",
+        mapQuery: "Savitribai+Phule+Pune+University"
+      },
+      {
+        id: "dypatil",
+        name: "Dr. D.Y. Patil Institute of Technology (DIT Pimpri)",
+        shortName: "DY Patil Pimpri",
+        area: "Sant Tukaram Nagar, Pimpri, Pune",
+        address: "Sant Tukaram Nagar, Pimpri, Pune, Maharashtra 411018",
+        lat: 18.6231,
+        lng: 73.8161,
+        stream: "Engineering",
+        type: "Private/Deemed",
+        established: 1998,
+        naac: "A++",
+        cutoffPercentile: 95.8,
+        cutoffPercentage: 88.5,
+        examName: "MHT-CET / JEE Main",
+        avgPackage: "₹7.40 LPA",
+        annualFees: "₹1,38,000",
+        courses: ["Computer Engineering", "IT", "AI & Data Science", "Robotics & Automation", "Civil Engg."],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/D._Y._Patil_College_of_Engineering,_Akurdi.jpg",
+        mapQuery: "Dr+D+Y+Patil+Institute+of+Technology+Pimpri+Pune"
+      },
+      {
+        id: "aissms",
+        name: "AISSMS College of Engineering",
+        shortName: "AISSMS COE",
+        area: "Kennedy Road, Near RTO, Pune",
+        address: "1, Kennedy Rd, Near RTO, Sangamvadi, Pune 411001",
+        lat: 18.5314,
+        lng: 73.8669,
+        stream: "Engineering",
+        type: "Private/Deemed",
+        established: 1992,
+        naac: "A+",
+        cutoffPercentile: 93.2,
+        cutoffPercentage: 85.0,
+        examName: "MHT-CET / JEE Main",
+        avgPackage: "₹6.20 LPA",
+        annualFees: "₹1,42,000",
+        courses: ["Computer Engineering", "Chemical Engg.", "Mechanical Engg.", "Electronics & Telecomm.", "Civil"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/AISSMS_College_of_Engineering.jpg",
+        mapQuery: "AISSMS+College+of+Engineering+Pune"
+      },
+      {
+        id: "jspm",
+        name: "JSPM's Rajarshi Shahu College of Engineering (RSCOE)",
+        shortName: "JSPM Tathawade",
+        area: "Tathawade, Pune",
+        address: "Service Rd, Ashok Nagar, Tathawade, Pimpri-Chinchwad, Pune 411033",
+        lat: 18.6203,
+        lng: 73.7471,
+        stream: "Engineering",
+        type: "Autonomous",
+        established: 2001,
+        naac: "A",
+        cutoffPercentile: 94.5,
+        cutoffPercentage: 86.0,
+        examName: "MHT-CET / JEE Main",
+        avgPackage: "₹6.50 LPA",
+        annualFees: "₹1,32,000",
+        courses: ["Computer Engineering", "IT", "CS & Business Systems", "Mechanical", "Electrical"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/JSPM_Campus_Pune.jpg",
+        mapQuery: "JSPM+Rajarshi+Shahu+College+of+Engineering+Tathawade"
+      },
+      {
+        id: "bvp",
+        name: "Bharati Vidyapeeth Deemed University (BVDU)",
+        shortName: "Bharati Vidyapeeth",
+        area: "Dhankawadi, Katraj, Pune",
+        address: "Pune-Satara Rd, Dhankawadi, Pune, Maharashtra 411043",
+        lat: 18.4571,
+        lng: 73.8559,
+        stream: "Medical/Pharmacy",
+        type: "Private/Deemed",
+        established: 1964,
+        naac: "A++",
+        cutoffPercentile: 89.0,
+        cutoffPercentage: 82.0,
+        examName: "NEET / BVP-CET",
+        avgPackage: "₹6.90 LPA",
+        annualFees: "₹1,95,000",
+        courses: ["B.Pharm", "BAMS", "BDS", "B.Tech CSE", "BBA LLB"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Bharati_Vidyapeeth_Front_View.jpg",
+        mapQuery: "Bharati+Vidyapeeth+Deemed+University+Katraj+Pune"
+      },
+      {
+        id: "spcollege",
+        name: "Sir Parashurambhau College (S.P. College)",
+        shortName: "S.P. College",
+        area: "Tilak Road, Sadashiv Peth, Pune",
+        address: "Tilak Rd, Lokamanya Nagar, Sadashiv Peth, Pune 411030",
+        lat: 18.5067,
+        lng: 73.8484,
+        stream: "Arts/Science/Commerce",
+        type: "Autonomous",
+        established: 1916,
+        naac: "A+",
+        cutoffPercentile: 91.0,
+        cutoffPercentage: 88.5,
+        examName: "12th Board Merit",
+        avgPackage: "₹4.60 LPA",
+        annualFees: "₹22,000",
+        courses: ["B.Com", "B.Sc. Computer Science", "B.A. Economics", "BBA", "B.Sc. Chemistry"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Sir_Parashurambhau_College_Pune.jpg",
+        mapQuery: "Sir+Parashurambhau+College+Tilak+Road+Pune"
+      },
+      {
+        id: "sinhgad",
+        name: "Sinhgad College of Engineering (SCOE)",
+        shortName: "Sinhgad Vadgaon",
+        area: "Vadgaon Budruk, Sinhgad Road, Pune",
+        address: "S. No. 44/1, Off Sinhgad Rd, Vadgaon Budruk, Pune 411041",
+        lat: 18.4678,
+        lng: 73.8358,
+        stream: "Engineering",
+        type: "Private/Deemed",
+        established: 1996,
+        naac: "A",
+        cutoffPercentile: 87.5,
+        cutoffPercentage: 78.0,
+        examName: "MHT-CET / JEE Main",
+        avgPackage: "₹5.40 LPA",
+        annualFees: "₹1,24,000",
+        courses: ["Computer Engineering", "IT", "Electronics & Telecomm.", "Mechanical", "Biotechnology"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Sinhgad_College_of_Engineering_Pune.jpg",
+        mapQuery: "Sinhgad+College+of+Engineering+Vadgaon+Pune"
+      },
+      {
+        id: "garware",
+        name: "MES Abasaheb Garware College",
+        shortName: "Garware College",
+        area: "Karve Road, Deccan, Pune",
+        address: "Karve Rd, Deccan Gymkhana, Pune, Maharashtra 411004",
+        lat: 18.5134,
+        lng: 73.8369,
+        stream: "Arts/Science/Commerce",
+        type: "Autonomous",
+        established: 1945,
+        naac: "A",
+        cutoffPercentile: 88.0,
+        cutoffPercentage: 84.5,
+        examName: "12th Board Merit",
+        avgPackage: "₹4.30 LPA",
+        annualFees: "₹24,500",
+        courses: ["B.Sc. Computer Science", "B.Sc. Microbiology", "B.A. Psychology", "B.Sc. Biodiversity"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Abasaheb_Garware_College_Pune.jpg",
+        mapQuery: "Abasaheb+Garware+College+Karve+Road+Pune"
+      },
+      {
+        id: "modern",
+        name: "PES's Modern College of Arts, Science & Commerce",
+        shortName: "Modern College",
+        area: "Shivajinagar, Pune",
+        address: "Jangali Maharaj Rd, Shivajinagar, Pune 411005",
+        lat: 18.5256,
+        lng: 73.8467,
+        stream: "Arts/Science/Commerce",
+        type: "Autonomous",
+        established: 1970,
+        naac: "A+",
+        cutoffPercentile: 86.5,
+        cutoffPercentage: 83.0,
+        examName: "12th Board Merit",
+        avgPackage: "₹4.50 LPA",
+        annualFees: "₹29,000",
+        courses: ["BBA (CA / BCA)", "B.Com", "B.Sc. Computer Science", "B.Sc. Animation", "B.A."],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Modern_College_Shivajinagar_Pune.jpg",
+        mapQuery: "Modern+College+Shivajinagar+Pune"
+      },
+      {
+        id: "wadia",
+        name: "Nowrosjee Wadia College",
+        shortName: "Wadia College",
+        area: "Bund Garden Road, Pune",
+        address: "19, Late Prin. V.K. Joag Path, Bund Garden Rd, Pune 411001",
+        lat: 18.5338,
+        lng: 73.8806,
+        stream: "Arts/Science/Commerce",
+        type: "Autonomous",
+        established: 1932,
+        naac: "A+",
+        cutoffPercentile: 85.0,
+        cutoffPercentage: 81.5,
+        examName: "12th Board Merit",
+        avgPackage: "₹4.40 LPA",
+        annualFees: "₹26,000",
+        courses: ["B.Sc. Computer Science", "B.Sc. Petroleum Tech", "B.A. English & Economics", "B.Com"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Nowrosjee_Wadia_College_Pune.jpg",
+        mapQuery: "Nowrosjee+Wadia+College+Pune"
+      },
+      {
+        id: "indira",
+        name: "Indira College of Commerce & Science (ICCS)",
+        shortName: "Indira College",
+        area: "Tathawade, Wakad, Pune",
+        address: "Dhruv, 89/2A, New Pune-Mumbai Hwy, Tathawade, Pune 411033",
+        lat: 18.6134,
+        lng: 73.7495,
+        stream: "Arts/Science/Commerce",
+        type: "Autonomous",
+        established: 2001,
+        naac: "A",
+        cutoffPercentile: 82.0,
+        cutoffPercentage: 76.5,
+        examName: "12th Merit / MAH-CET",
+        avgPackage: "₹4.90 LPA",
+        annualFees: "₹68,000",
+        courses: ["BBA", "BCA Science", "B.Com", "B.Sc. Cyber Security", "B.Sc. Data Science"],
+        photo: "https://commons.wikimedia.org/wiki/Special:FilePath/Indira_Group_of_Institutes_Pune.jpg",
+        mapQuery: "Indira+College+of+Commerce+and+Science+Tathawade+Pune"
+      }
+    ];
+
+    // =========================================================================
+    // 2. APPLICATION STATE
+    // =========================================================================
+    let state = {
+      scoreMode: "percentile", // 'percentile' or 'percentage'
+      userScore: 92.0,
+      selectedCompareIds: ["coep", "pict", "vit"], // Pre-selected 3 popular colleges for immediate compare readiness
+      activeDetailId: null
+    };
+
+    // Fallback SVG Data URI generator for campus images if external URL fails
+    function getCampusFallbackSvg(name, area) {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1e1b4b"/>
+            <stop offset="100%" stop-color="#4338ca"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="450" fill="url(#g)"/>
+        <circle cx="680" cy="90" r="140" fill="#6366f1" opacity="0.25"/>
+        <circle cx="120" cy="380" r="180" fill="#818cf8" opacity="0.18"/>
+        <rect x="60" y="290" width="680" height="4" rx="2" fill="#a5b4fc" opacity="0.4"/>
+        <text x="60" y="210" fill="#ffffff" font-family="sans-serif" font-size="34" font-weight="bold">${name}</text>
+        <text x="60" y="255" fill="#c7d2fe" font-family="sans-serif" font-size="22">Pune Campus • ${area}</text>
+      </svg>`;
+      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+    }
+
+    function handleImageFallback(imgEl, name, area) {
+      imgEl.onerror = null;
+      imgEl.src = getCampusFallbackSvg(name, area);
+    }
+
+    // =========================================================================
+    // 3. SCORE & FILTER CONTROLS
+    // =========================================================================
+    function setScoreMode(mode) {
+      state.scoreMode = mode;
+      const pctBtn = document.getElementById("modePercentageBtn");
+      const ileBtn = document.getElementById("modePercentileBtn");
+      const label = document.getElementById("scoreLabelText");
+      const unit = document.getElementById("scoreUnitBadge");
+
+      if (mode === "percentile") {
+        ileBtn.className = "px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-indigo-600 text-white shadow-sm";
+        pctBtn.className = "px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition text-slate-600 hover:text-slate-900";
+        label.textContent = "Your MHT-CET / JEE / NEET Percentile:";
+        unit.textContent = "%ile";
+      } else {
+        pctBtn.className = "px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-indigo-600 text-white shadow-sm";
+        ileBtn.className = "px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition text-slate-600 hover:text-slate-900";
+        label.textContent = "Your 12th Board Percentage (HSC / CBSE / ICSE):";
+        unit.textContent = "%";
+      }
+      renderColleges();
+    }
+
+    function handleScoreInput(val) {
+      let num = parseFloat(val);
+      if (isNaN(num)) num = 0;
+      if (num > 100) num = 100;
+      if (num < 0) num = 0;
+      state.userScore = num;
+      document.getElementById("scoreNumberInput").value = num;
+      document.getElementById("scoreRangeInput").value = Math.max(40, num);
+      renderColleges();
+      if (state.activeDetailId) {
+        openCollegeDetail(state.activeDetailId, false);
+      }
+    }
+
+    function resetFilters() {
+      document.getElementById("streamFilter").value = "ALL";
+      document.getElementById("typeFilter").value = "ALL";
+      document.getElementById("sortFilter").value = "match";
+      document.getElementById("onlyEligibleToggle").checked = false;
+      document.getElementById("searchInput").value = "";
+      renderColleges();
+      showToast("Filters reset to default");
+    }
+
+    // =========================================================================
+    // 4. MATCHING, SORTING & RENDERING CARDS
+    // =========================================================================
+    function getCollegeCutoff(college) {
+      return state.scoreMode === "percentile" ? college.cutoffPercentile : college.cutoffPercentage;
+    }
+
+    function getEligibilityStatus(college) {
+      const cutoff = getCollegeCutoff(college);
+      const diff = state.userScore - cutoff;
+      if (diff >= 0) {
+        return {
+          code: "safe",
+          label: "Safe Match",
+          badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-200",
+          dotClass: "bg-emerald-600",
+          diffText: `+${diff.toFixed(1)}`
+        };
+      } else if (diff >= -3.0) {
+        return {
+          code: "reach",
+          label: "Borderline",
+          badgeClass: "bg-amber-100 text-amber-800 border-amber-200",
+          dotClass: "bg-amber-500",
+          diffText: `${diff.toFixed(1)}`
+        };
+      } else {
+        return {
+          code: "high",
+          label: "Above Cutoff",
+          badgeClass: "bg-rose-100 text-rose-800 border-rose-200",
+          dotClass: "bg-rose-500",
+          diffText: `${diff.toFixed(1)}`
+        };
+      }
+    }
+
+    function parseNumericValue(str) {
+      const cleaned = str.replace(/[^0-9.]/g, "");
+      return parseFloat(cleaned) || 0;
+    }
+
+    function renderColleges() {
+      const streamVal = document.getElementById("streamFilter").value;
+      const typeVal = document.getElementById("typeFilter").value;
+      const sortVal = document.getElementById("sortFilter").value;
+      const onlyEligible = document.getElementById("onlyEligibleToggle").checked;
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+
+      let filtered = puneColleges.filter(col => {
+        if (streamVal !== "ALL" && col.stream !== streamVal) return false;
+        if (typeVal !== "ALL" && col.type !== typeVal) return false;
+        if (onlyEligible) {
+          const status = getEligibilityStatus(col);
+          if (status.code === "high") return false;
+        }
+        if (query) {
+          const haystack = `${col.name} ${col.shortName} ${col.area} ${col.stream} ${col.courses.join(" ")}`.toLowerCase();
+          if (!haystack.includes(query)) return false;
+        }
+        return true;
+      });
+
+      // Sort
+      filtered.sort((a, b) => {
+        const cutA = getCollegeCutoff(a);
+        const cutB = getCollegeCutoff(b);
+        if (sortVal === "match") {
+          const eligA = state.userScore >= cutA - 3 ? 1 : 0;
+          const eligB = state.userScore >= cutB - 3 ? 1 : 0;
+          if (eligA !== eligB) return eligB - eligA;
+          return cutB - cutA;
+        }
+        if (sortVal === "cutoffHigh") return cutB - cutA;
+        if (sortVal === "cutoffLow") return cutA - cutB;
+        if (sortVal === "package") return parseNumericValue(b.avgPackage) - parseNumericValue(a.avgPackage);
+        if (sortVal === "feesLow") return parseNumericValue(a.annualFees) - parseNumericValue(b.annualFees);
+        return 0;
+      });
+
+      // Update header counters
+      document.getElementById("visibleCount").textContent = filtered.length;
+      const unitLabel = state.scoreMode === "percentile" ? "%ile entrance score" : "% 12th board marks";
+      document.getElementById("matchSummaryText").textContent = `Comparing against your ${state.userScore.toFixed(1)} ${unitLabel}`;
+
+      const grid = document.getElementById("collegeGrid");
+      const emptyState = document.getElementById("emptyState");
+
+      if (filtered.length === 0) {
+        grid.innerHTML = "";
+        emptyState.classList.remove("hidden");
+        return;
+      }
+      emptyState.classList.add("hidden");
+
+      grid.innerHTML = filtered.map(c => {
+        const status = getEligibilityStatus(c);
+        const cutoff = getCollegeCutoff(c);
+        const unitLabel = state.scoreMode === "percentile" ? "%ile" : "%";
+        const isCompared = state.selectedCompareIds.includes(c.id);
+        const safeShortName = c.shortName.replace(/'/g, "\\'");
+        const safeArea = c.area.replace(/'/g, "\\'");
+
+        return `
+          <article class="bg-white rounded-2xl border ${isCompared ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-slate-200'} shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col group">
+            <!-- Campus Photo Header -->
+            <div onclick="openCollegeDetail('${c.id}')" class="relative h-48 bg-slate-200 overflow-hidden cursor-pointer">
+              <img
+                src="${c.photo}"
+                alt="${c.name} Pune Campus"
+                onerror="handleImageFallback(this, '${safeShortName}', '${safeArea}')"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
+
+              <!-- Top Badges -->
+              <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border shadow-sm ${status.badgeClass}">
+                  <span class="w-2 h-2 rounded-full ${status.dotClass}"></span>
+                  ${status.label} (${status.diffText})
+                </span>
+                <span class="px-2.5 py-1 rounded-lg bg-slate-900/80 backdrop-blur text-white text-[11px] font-bold border border-white/15">
+                  NAAC ${c.naac}
+                </span>
+              </div>
+
+              <!-- Bottom Location Overlay -->
+              <div class="absolute bottom-3 left-3 right-3 text-white">
+                <div class="flex items-center gap-1.5 text-xs text-indigo-200 font-medium">
+                  <svg class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="truncate">${c.area}</span>
+                </div>
+                <h3 class="font-display font-bold text-base sm:text-lg leading-snug mt-0.5 line-clamp-1" title="${c.name}">
+                  ${c.name}
+                </h3>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div>
+                <!-- Tags -->
+                <div class="flex flex-wrap items-center gap-1.5 mb-3">
+                  <span class="px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 text-[11px] font-semibold border border-indigo-100">${c.stream}</span>
+                  <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-semibold">${c.type}</span>
+                  <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[11px]">Est. ${c.established}</span>
+                </div>
+
+                <!-- Cutoff Highlight Box -->
+                <div class="bg-slate-50 rounded-xl p-3 border border-slate-200/80 grid grid-cols-2 gap-2">
+                  <div>
+                    <p class="text-[11px] font-medium text-slate-500">Required Cutoff</p>
+                    <p class="font-display font-extrabold text-base text-slate-900">
+                      ${cutoff.toFixed(1)} <span class="text-xs font-bold text-indigo-600">${unitLabel}</span>
+                    </p>
+                    <p class="text-[10px] text-slate-400">${c.examName}</p>
+                  </div>
+                  <div class="border-l border-slate-200 pl-3">
+                    <p class="text-[11px] font-medium text-slate-500">Alt. Cutoff (${state.scoreMode === 'percentile' ? '12th %' : '%ile'})</p>
+                    <p class="font-display font-bold text-sm text-slate-700 mt-0.5">
+                      ${state.scoreMode === 'percentile' ? c.cutoffPercentage.toFixed(1) + '%' : c.cutoffPercentile.toFixed(1) + '%ile'}
+                    </p>
+                    <p class="text-[10px] text-slate-400">Open Category</p>
+                  </div>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="grid grid-cols-2 gap-3 mt-3 text-xs">
+                  <div class="bg-emerald-50/60 border border-emerald-100 rounded-lg p-2.5">
+                    <span class="text-slate-500 block text-[11px]">Avg. Package</span>
+                    <span class="font-bold text-emerald-800 text-sm">${c.avgPackage}</span>
+                  </div>
+                  <div class="bg-slate-50 border border-slate-100 rounded-lg p-2.5">
+                    <span class="text-slate-500 block text-[11px]">Approx. Annual Fee</span>
+                    <span class="font-bold text-slate-800 text-sm">${c.annualFees}</span>
+                  </div>
+                </div>
+
+                <!-- Popular Courses -->
+                <div class="mt-3">
+                  <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Popular Courses</p>
+                  <div class="flex flex-wrap gap-1">
+                    ${c.courses.slice(0, 3).map(course => `<span class="text-[11px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md">${course}</span>`).join("")}
+                    ${c.courses.length > 3 ? `<span class="text-[11px] text-slate-400 px-1 py-0.5">+${c.courses.length - 3} more</span>` : ""}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card Action Footer -->
+              <div class="pt-3 border-t border-slate-100 flex items-center gap-2">
+                <button onclick="openCollegeDetail('${c.id}')" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white transition">
+                  <span>View Details</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+                <button onclick="openMapModal('${c.id}')" title="Quick Pune Map" class="inline-flex items-center justify-center p-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 transition">
+                  <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </button>
+                <button onclick="toggleCompare('${c.id}')" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition ${
+                  isCompared
+                    ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm'
+                    : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200'
+                }">
+                  ${
+                    isCompared
+                      ? `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Added`
+                      : `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg> Compare`
+                  }
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      updateCompareDock();
+    }
+
+    // =========================================================================
+    // 4B. DEDICATED FULL-PAGE COLLEGE DETAIL VIEW
+    // =========================================================================
+    function openCollegeDetail(collegeId, shouldScroll = true) {
+      const col = puneColleges.find(c => c.id === collegeId);
+      if (!col) return;
+
+      state.activeDetailId = collegeId;
+      const status = getEligibilityStatus(col);
+      const cutoff = getCollegeCutoff(col);
+      const unitLabel = state.scoreMode === "percentile" ? "%ile" : "%";
+      const isCompared = state.selectedCompareIds.includes(col.id);
+      const safeShortName = col.shortName.replace(/'/g, "\\'");
+      const safeArea = col.area.replace(/'/g, "\\'");
+
+      const delta = 0.006;
+      const bbox = `${col.lng - delta},${col.lat - delta},${col.lng + delta},${col.lat + delta}`;
+      const osmUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${col.lat},${col.lng}`;
+      const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${col.mapQuery}`;
+
+      const relatedColleges = puneColleges
+        .filter(item => item.id !== col.id && item.stream === col.stream)
+        .slice(0, 3);
+
+      document.getElementById("detailTopActions").innerHTML = `
+        <a href="${gmapsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 transition">
+          <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span>Google Maps</span>
+        </a>
+        <button onclick="toggleCompare('${col.id}'); openCollegeDetail('${col.id}', false);" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition ${
+          isCompared
+            ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+            : 'bg-indigo-600 text-white hover:bg-indigo-700'
+        }">
+          ${isCompared ? '✓ Added to Compare' : '+ Add to Compare'}
+        </button>
+      `;
+
+      document.getElementById("collegeDetailContent").innerHTML = `
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+          <div class="relative h-64 sm:h-80 md:h-96 bg-slate-900">
+            <img
+              src="${col.photo}"
+              alt="${col.name} Campus"
+              onerror="handleImageFallback(this, '${safeShortName}', '${safeArea}')"
+              class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-transparent"></div>
+            <div class="absolute top-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-3 py-1 rounded-full bg-indigo-600 text-white text-xs font-bold shadow">${col.stream}</span>
+                <span class="px-3 py-1 rounded-full bg-white/90 text-slate-900 text-xs font-bold">${col.type}</span>
+                <span class="px-3 py-1 rounded-full bg-slate-900/80 text-amber-300 border border-amber-400/30 text-xs font-bold">NAAC ${col.naac} Accredited</span>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-slate-900/80 text-slate-200 text-xs font-semibold">Est. ${col.established}</span>
+            </div>
+            <div class="absolute bottom-5 left-5 right-5 text-white">
+              <p class="text-xs sm:text-sm text-indigo-200 font-medium flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                </svg>
+                <span>${col.address}</span>
+              </p>
+              <h1 class="font-display text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mt-1">${col.name}</h1>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 bg-white">
+            <div class="p-4 sm:p-5">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Entrance Cutoff</span>
+              <p class="font-display text-xl sm:text-2xl font-extrabold text-indigo-700 mt-1">${col.cutoffPercentile.toFixed(1)} %ile</p>
+              <p class="text-xs text-slate-400 mt-0.5">Via ${col.examName}</p>
+            </div>
+            <div class="p-4 sm:p-5">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">12th Board Benchmark</span>
+              <p class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">${col.cutoffPercentage.toFixed(1)}%</p>
+              <p class="text-xs text-slate-400 mt-0.5">HSC / CBSE / ICSE Merit</p>
+            </div>
+            <div class="p-4 sm:p-5">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Average Placement</span>
+              <p class="font-display text-xl sm:text-2xl font-extrabold text-emerald-700 mt-1">${col.avgPackage}</p>
+              <p class="text-xs text-slate-400 mt-0.5">Campus Recruitment</p>
+            </div>
+            <div class="p-4 sm:p-5">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Approx. Annual Fee</span>
+              <p class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">${col.annualFees}</p>
+              <p class="text-xs text-slate-400 mt-0.5">Open Category Tuition</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7 space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <h2 class="font-display font-bold text-lg text-slate-900">Your Personalized Admission Match</h2>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${status.badgeClass}">
+                  <span class="w-2 h-2 rounded-full ${status.dotClass}"></span>
+                  ${status.label} (${status.diffText} ${unitLabel})
+                </span>
+              </div>
+              <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-600 font-medium">Your Entered ${state.scoreMode === 'percentile' ? 'Entrance Percentile' : '12th Percentage'}:</span>
+                  <span class="font-display font-extrabold text-indigo-700 text-base">${state.userScore.toFixed(1)} ${unitLabel}</span>
+                </div>
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-600 font-medium">${col.shortName} Required Cutoff:</span>
+                  <span class="font-display font-bold text-slate-900 text-base">${cutoff.toFixed(1)} ${unitLabel}</span>
+                </div>
+                <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                  <div class="h-full rounded-full ${status.code === 'safe' ? 'bg-emerald-500' : status.code === 'reach' ? 'bg-amber-500' : 'bg-rose-500'}" style="width: ${Math.min(100, Math.max(15, (state.userScore / cutoff) * 85))}%"></div>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  ${
+                    status.code === 'safe'
+                      ? `Great news! Your score of <strong>${state.userScore.toFixed(1)} ${unitLabel}</strong> is above the benchmark cutoff of <strong>${cutoff.toFixed(1)} ${unitLabel}</strong>. You have a strong chance of securing admission in CAP / Merit rounds.`
+                      : status.code === 'reach'
+                      ? `You are within <strong>3.0 ${unitLabel}</strong> of the benchmark cutoff. Consider applying across all CAP rounds, institutional quota, or allied specializations at ${col.shortName}.`
+                      : `Your current score is <strong>${Math.abs(state.userScore - cutoff).toFixed(1)} ${unitLabel}</strong> below the general cutoff. Check reserved category cutoffs, management/institutional seats, or compare similar Pune colleges below.`
+                  }
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+              <h2 class="font-display font-bold text-lg text-slate-900 mb-3">Undergraduate Programs & Specializations After 12th</h2>
+              <p class="text-xs sm:text-sm text-slate-500 mb-4">Popular full-time degree programs offered at ${col.name}, ${col.area}:</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                ${col.courses.map((course, idx) => `
+                  <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0">
+                      0${idx + 1}
+                    </div>
+                    <div>
+                      <p class="font-semibold text-sm text-slate-900">${course}</p>
+                      <p class="text-[11px] text-slate-500">Full-Time • SPPU / Autonomous</p>
+                    </div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+              <h2 class="font-display font-bold text-lg text-slate-900 mb-3">Admission Process & Student Checklist</h2>
+              <ul class="space-y-2.5 text-xs sm:text-sm text-slate-600">
+                <li class="flex items-start gap-2.5">
+                  <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
+                  <span><strong>Qualifying Exam:</strong> Pass 10+2 (HSC / CBSE / ICSE) with minimum 45%–50% aggregate in relevant subjects alongside valid <strong>${col.examName}</strong> score.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
+                  <span><strong>Counseling & Merit Round:</strong> Register through Maharashtra CET Cell CAP Portal or the institute's autonomous admission portal after 12th results.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
+                  <span><strong>Documents Needed:</strong> 10th & 12th Marksheets, Entrance Scorecard, Domicile/Nationality Certificate, Transfer Certificate (TC), and Category/EWS documents if applicable.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+              <div class="p-4 sm:p-5 border-b border-slate-200">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600">Campus Location in Pune</span>
+                <h3 class="font-display font-bold text-base sm:text-lg text-slate-900 mt-0.5">${col.area}</h3>
+                <p class="text-xs text-slate-500 mt-1">${col.address}</p>
+              </div>
+              <div class="h-64 bg-slate-100">
+                <iframe class="w-full h-full border-0" loading="lazy" src="${osmUrl}"></iframe>
+              </div>
+              <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-2">
+                <span class="text-[11px] font-medium text-slate-500">GPS: ${col.lat.toFixed(4)}° N, ${col.lng.toFixed(4)}° E</span>
+                <a href="${gmapsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition">
+                  <span>Open Directions</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+              <h3 class="font-display font-bold text-base text-slate-900 mb-3">Compare With Similar Pune Colleges</h3>
+              <div class="space-y-3">
+                ${relatedColleges.map(rel => `
+                  <div onclick="openCollegeDetail('${rel.id}')" class="flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30 cursor-pointer transition">
+                    <div class="min-w-0">
+                      <p class="font-bold text-xs sm:text-sm text-slate-900 truncate">${rel.name}</p>
+                      <p class="text-[11px] text-slate-500">${rel.area} • Cutoff: ${getCollegeCutoff(rel).toFixed(1)} ${unitLabel}</p>
+                    </div>
+                    <span class="text-xs font-bold text-indigo-600 shrink-0">View &rarr;</span>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("directoryView").classList.add("hidden");
+      document.getElementById("collegeDetailView").classList.remove("hidden");
+      if (shouldScroll) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    function closeCollegeDetail() {
+      state.activeDetailId = null;
+      document.getElementById("collegeDetailView").classList.add("hidden");
+      document.getElementById("directoryView").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // =========================================================================
+    // 5. SIDE-BY-SIDE COMPARISON LOGIC
+    // =========================================================================
+    function toggleCompare(collegeId) {
+      const idx = state.selectedCompareIds.indexOf(collegeId);
+      if (idx > -1) {
+        state.selectedCompareIds.splice(idx, 1);
+        showToast("Removed from comparison");
+      } else {
+        if (state.selectedCompareIds.length >= 4) {
+          showToast("You can compare up to 4 colleges at a time");
+          return;
+        }
+        state.selectedCompareIds.push(collegeId);
+        showToast("Added to comparison");
+      }
+      renderColleges();
+      updateCompareDock();
+    }
+
+    function clearCompare() {
+      state.selectedCompareIds = [];
+      renderColleges();
+      updateCompareDock();
+      showToast("Comparison list cleared");
+    }
+
+    function updateCompareDock() {
+      const count = state.selectedCompareIds.length;
+      document.getElementById("headerCompareCount").textContent = count;
+      document.getElementById("dockCount").textContent = count;
+      const dockChips = document.getElementById("dockChips");
+      const dock = document.getElementById("compareDock");
+
+      if (count > 0) {
+        dock.classList.remove("translate-y-32", "opacity-0", "pointer-events-none");
+      } else {
+        dock.classList.add("translate-y-32", "opacity-0", "pointer-events-none");
+      }
+
+      dockChips.innerHTML = state.selectedCompareIds.map(id => {
+        const col = puneColleges.find(c => c.id === id);
+        if (!col) return "";
+        return `
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-800 text-slate-200 text-xs font-medium border border-slate-700">
+            <span class="truncate max-w-[120px]">${col.shortName}</span>
+            <button onclick="toggleCompare('${id}')" class="text-slate-400 hover:text-white">&times;</button>
+          </span>
+        `;
+      }).join("");
+    }
+
+    function openCompareModal() {
+      if (state.selectedCompareIds.length === 0) {
+        showToast("Please select at least one college to compare");
+        return;
+      }
+
+      const cols = state.selectedCompareIds.map(id => puneColleges.find(c => c.id === id)).filter(Boolean);
+      const unitLabel = state.scoreMode === "percentile" ? "%ile" : "%";
+
+      const rows = [
+        {
+          label: "College & Campus",
+          render: (c) => {
+            const safeShortName = c.shortName.replace(/'/g, "\\'");
+            const safeArea = c.area.replace(/'/g, "\\'");
+            return `
+              <div class="space-y-2">
+                <img src="${c.photo}" onerror="handleImageFallback(this, '${safeShortName}', '${safeArea}')" class="w-full h-28 object-cover rounded-xl border border-slate-200" />
+                <div class="font-display font-bold text-sm text-slate-900">${c.name}</div>
+                <button onclick="closeCompareModal(); openCollegeDetail('${c.id}');" class="text-[11px] font-semibold text-indigo-600 hover:underline">Open Full Details &rarr;</button>
+              </div>
+            `;
+          }
+        },
+        {
+          label: "Your Eligibility Match",
+          render: (c) => {
+            const status = getEligibilityStatus(c);
+            return `
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${status.badgeClass}">
+                <span class="w-2 h-2 rounded-full ${status.dotClass}"></span>
+                ${status.label} (${status.diffText})
+              </span>
+            `;
+          }
+        },
+        {
+          label: "Entrance Cutoff",
+          render: (c) => `<span class="font-display font-bold text-slate-900">${c.cutoffPercentile.toFixed(1)} %ile</span><br/><span class="text-[11px] text-slate-400">${c.examName}</span>`
+        },
+        {
+          label: "12th Board Cutoff",
+          render: (c) => `<span class="font-display font-bold text-slate-900">${c.cutoffPercentage.toFixed(1)}%</span>`
+        },
+        {
+          label: "Stream / Field",
+          render: (c) => `<span class="px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 text-xs font-semibold">${c.stream}</span>`
+        },
+        {
+          label: "College Type",
+          render: (c) => `<span class="text-xs text-slate-700">${c.type} (Est. ${c.established})</span>`
+        },
+        {
+          label: "NAAC Accreditation",
+          render: (c) => `<span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 text-xs font-bold">NAAC ${c.naac}</span>`
+        },
+        {
+          label: "Average Package",
+          render: (c) => `<span class="font-bold text-emerald-700 text-sm">${c.avgPackage}</span>`
+        },
+        {
+          label: "Annual Fees (Approx.)",
+          render: (c) => `<span class="font-semibold text-slate-800 text-sm">${c.annualFees}</span>`
+        },
+        {
+          label: "Location in Pune",
+          render: (c) => `<span class="text-xs text-slate-600">${c.area}</span><br/><button onclick="closeCompareModal(); openMapModal('${c.id}');" class="text-[11px] text-indigo-600 hover:underline mt-1 inline-block">View Map</button>`
+        },
+        {
+          label: "Key Courses Offered",
+          render: (c) => `<div class="flex flex-wrap gap-1">${c.courses.map(crs => `<span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded text-slate-700">${crs}</span>`).join("")}</div>`
+        },
+        {
+          label: "Action",
+          render: (c) => `
+            <button onclick="toggleCompare('${c.id}'); openCompareModal();" class="text-xs text-rose-600 hover:text-rose-800 font-semibold">Remove</button>
+          `
+        }
+      ];
+
+      const tableHtml = `
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200">
+                <th class="p-3 text-left text-xs font-bold uppercase tracking-wider text-slate-400 w-40 bg-slate-50">Metric</th>
+                ${cols.map(c => `<th class="p-3 text-left text-sm font-display font-bold text-slate-900 bg-slate-50 min-w-[220px]">${c.shortName}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-xs sm:text-sm">
+              ${rows.map(row => `
+                <tr>
+                  <td class="p-3 font-semibold text-slate-500 bg-slate-50/70 align-top">${row.label}</td>
+                  ${cols.map(c => `<td class="p-3 text-slate-700 align-top">${row.render(c)}</td>`).join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      document.getElementById("compareModalSubtitle").textContent = `Comparing ${cols.length} college${cols.length > 1 ? 's' : ''} based on your ${state.userScore.toFixed(1)} ${unitLabel} score`;
+      document.getElementById("compareModalBody").innerHTML = tableHtml;
+      document.getElementById("compareModal").classList.remove("hidden");
+      document.getElementById("compareModal").classList.add("flex");
+    }
+
+    function closeCompareModal() {
+      document.getElementById("compareModal").classList.remove("flex");
+      document.getElementById("compareModal").classList.add("hidden");
+    }
+
+    // =========================================================================
+    // 6. MAP MODAL & SOURCE MODAL & TOAST
+    // =========================================================================
+    function openMapModal(collegeId) {
+      const col = puneColleges.find(c => c.id === collegeId);
+      if (!col) return;
+
+      document.getElementById("mapModalTitle").textContent = col.name;
+      document.getElementById("mapModalAddress").textContent = col.address;
+      document.getElementById("mapModalCoords").textContent = `${col.lat.toFixed(4)}° N, ${col.lng.toFixed(4)}° E`;
+
+      const delta = 0.006;
+      const bbox = `${col.lng - delta},${col.lat - delta},${col.lng + delta},${col.lat + delta}`;
+      const osmUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${col.lat},${col.lng}`;
+      document.getElementById("osmIframe").src = osmUrl;
+      document.getElementById("googleMapsExternalLink").href = `https://www.google.com/maps/search/?api=1&query=${col.mapQuery}`;
+
+      document.getElementById("mapModal").classList.remove("hidden");
+      document.getElementById("mapModal").classList.add("flex");
+    }
+
+    function closeMapModal() {
+      document.getElementById("mapModal").classList.remove("flex");
+      document.getElementById("mapModal").classList.add("hidden");
+      document.getElementById("osmIframe").src = "";
+    }
+
+    function openSourceModal() {
+      const htmlCode = document.documentElement.outerHTML;
+      document.getElementById("sourceCodeDisplay").textContent = htmlCode;
+      document.getElementById("sourceModal").classList.remove("hidden");
+      document.getElementById("sourceModal").classList.add("flex");
+    }
+
+    function closeSourceModal() {
+      document.getElementById("sourceModal").classList.remove("flex");
+      document.getElementById("sourceModal").classList.add("hidden");
+    }
+
+    function copyFullSourceCode() {
+      const codeText = document.documentElement.outerHTML;
+      const textarea = document.createElement("textarea");
+      textarea.value = codeText;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        document.getElementById("copySourceBtn").textContent = "Copied to Clipboard!";
+        setTimeout(() => {
+          document.getElementById("copySourceBtn").textContent = "Copy All Code";
+        }, 2000);
+        showToast("Full HTML source code copied to clipboard");
+      } catch (err) {
+        showToast("Failed to copy code");
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toastBox");
+      toast.textContent = message;
+      toast.classList.remove("opacity-0", "pointer-events-none", "translate-y-2");
+      toast.classList.add("opacity-100", "translate-y-0");
+      setTimeout(() => {
+        toast.classList.remove("opacity-100", "translate-y-0");
+        toast.classList.add("opacity-0", "pointer-events-none", "translate-y-2");
+      }, 2500);
+    }
+
+    // Initialize application on window load
+    window.onload = function() {
+      renderColleges();
+    };
+  </script>
+</body>
+</html>
